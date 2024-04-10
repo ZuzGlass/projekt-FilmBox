@@ -103,4 +103,261 @@ const filmy = [
 			'Na zámek v podhůří Krkonoš přijíždí jeho nový majitel Štěpán se svojí snoubenkou, krásnou komtesou Blankou, a mladším bratrem Adamem. Cestou kočár nešťastně srazí kolemjdoucí dívku, Adam jí pomůže a ona se do něj zamiluje. Na zámku Adam objeví starou vlašskou knihu, která by měla obsahovat cestu k pokladům. Tajemné značky vlašské knihy však nedokáže vyluštit ani národopisec Jiráček, který v kraji sbírá pověsti a nevychází z údivu nad tím, že zdejší lidé stále věří v Krakonoše. Na zámku se objeví záhadný cizinec a nabídne Štěpánovi, že jej k pokladu za určitých podmínek dovede. Výprava do hor může začít. Naplní se Liduščina láska k Adamovi? Jakou záhadu skrývá starý obraz na zámku Hůrka a co strašlivého se v horách kdysi odehrálo? A kdo je vlastně Krakonoš a jaké je jeho největší tajemství? (csfd.cz, Česká televize)',
 		premiera: '2022-12-24',
 	},
+	{
+		id: 'terminator-2',
+		nazev: 'Terminátor 2',
+		plakat: {
+			url: 'https://image.pmgstatic.com/cache/resized/w663/files/images/film/posters/000/001/1260_754a26.jpg',
+			sirka: 634,
+			vyska: 901,
+		},
+		ochutnavka: 'Americký akční sci-fi film.',
+		popis:
+			'V budoucnosti probíhá válka lidí se stroji, které převzaly vládu nad světem. Jedinou nadějí pro lidstvo je charismatický vůdce Hnutí odporu John Connor. Protože se ho stroje obávají, vysílají do minulosti nový prototyp kyborga, který ho má zničit jako malého chlapce. Vzápětí za ním Hnutí odporu vyšle starý model terminátora, přeprogramovaného tak, aby mladého Johna chránil. (csfd.cz, Bontonfilm)',
+		premiera: '1991-07-03',
+	},
 ]
+
+
+const filmId = window.location.hash.slice(1)
+const film = filmy.find((ar) => ar.id === filmId)
+const detail = document.querySelector("#detail-filmu")
+detail.innerHTML = ""
+
+detail.innerHTML += `
+<div class="row g-0">
+					<div class="col-md-5">
+						<img
+							src=${film.plakat.url}
+							alt="plakát"
+							class="img-fluid rounded-start"
+							width="663"
+							height="909"
+						/>
+					</div>
+					<div class="col-md-7">
+						<div class="card-body">
+							<h5 class="card-title">${film.nazev}</h5>
+							<p class="card-text">${film.popis}</p>
+							<p class="card-text">
+								<small class="text-muted" id="premiera"
+									>Premiéra <strong>24. prosince 2022</strong>, což je za 24
+									dní.</small
+								>
+							</p>
+							<h6>Hodnocení</h6>
+							<div class="stars">
+								<button
+									class="far fa-star button-star"
+									data-mdb-toggle="tooltip"
+									title="Nic moc"
+								>
+									1
+								</button>
+								<button
+									class="far fa-star button-star"
+									data-mdb-toggle="tooltip"
+									title="Ucházející"
+								>
+									2
+								</button>
+								<button
+									class="far fa-star button-star"
+									data-mdb-toggle="tooltip"
+									title="Dobrý"
+								>
+									3
+								</button>
+								<button
+									class="far fa-star button-star"
+									data-mdb-toggle="tooltip"
+									title="Skvělý"
+								>
+									4
+								</button>
+								<button
+									class="far fa-star button-star"
+									data-mdb-toggle="tooltip"
+									title="Úžasný"
+								>
+									5
+								</button>
+							</div>
+
+							<h6 class="mt-4">Poznámka</h6>
+							<form id="note-form">
+								<div class="row">
+									<div class="col-md-6 col-lg-7 col-xl-8 mb-2">
+										<div class="form-outline">
+											<textarea
+												class="form-control"
+												id="message-input"
+												rows="4"
+											></textarea>
+											<label class="form-label" for="message-input"
+												>Text poznámky</label
+											>
+										</div>
+									</div>
+									<div class="col-md-6 col-lg-5 col-xl-4">
+										<div class="form-check d-flex justify-content-center mb-2">
+											<input
+												class="form-check-input me-2 mb-2"
+												type="checkbox"
+												value=""
+												id="terms-checkbox"
+											/>
+											<label class="form-check-label" for="terms-checkbox">
+												Souhlasím se všeobecnými podmínky užívání.
+											</label>
+										</div>
+										<button type="submit" class="btn btn-primary btn-block">
+											Uložit
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+`
+
+
+const premiera = document.querySelector("#premiera")
+const datum = dayjs(film.premiera).format('D. M. YYYY')
+const dnes = dayjs()
+const datumPremiera = dayjs(film.premiera)
+const doba = dnes.diff(datumPremiera, "days")
+
+if (doba > 0) {
+	if (doba === 1) {
+	premiera.innerHTML = `Premiéra <strong>${datum}</strong>, což bylo před ${doba} dnem.`
+} else {
+	premiera.innerHTML = `Premiéra <strong>${datum}</strong>, což bylo před ${doba} dny.`
+}
+}
+else if (doba === 0) {
+premiera.innerHTML = `Premiéra <strong>${datum}</strong>, což je dnes.`
+}
+else {
+	if (doba === -1) {
+premiera.innerHTML = `Premiéra <strong>${datum}</strong>, což bude za ${Math.abs(doba)} den.`
+} else {
+	premiera.innerHTML = `Premiéra <strong>${datum}</strong>, což bude za ${Math.abs(doba)} dní.`
+}
+}
+
+
+const hvezdicky = document.querySelectorAll(".fa-star")
+
+const zvyrazniHvezdicky = (pocet) => {
+hvezdicky.forEach((hvezdicka, index) => {
+	
+	if (index < pocet) {
+		hvezdicka.classList.remove("far")
+		hvezdicka.classList.add("fas")
+	}
+	else {
+		hvezdicka.classList.remove("fas")
+		hvezdicka.classList.add("far")
+	}	
+})
+}
+let ohvezdickovano = 0
+
+hvezdicky.forEach((hvezdicka) => {
+	hvezdicka.addEventListener("click", () => {
+	const pocet = Number(hvezdicka.textContent)
+	zvyrazniHvezdicky(pocet)
+	ohvezdickovano = pocet
+	})
+
+	hvezdicka.addEventListener("mouseenter", () => {
+		const pocet = Number(hvezdicka.textContent)
+		zvyrazniHvezdicky(pocet)
+	})
+
+	hvezdicka.addEventListener("mouseleave", () => {	
+		zvyrazniHvezdicky(ohvezdickovano)
+	})
+})
+
+
+const poznamka = document.querySelector("#note-form")
+
+poznamka.addEventListener("submit", (event) => {
+    event.preventDefault()
+ 	const poznamkaInput = document.querySelector("#message-input")
+ 	const textPoznamka = poznamkaInput.value
+	const checkbox = document.querySelector("#terms-checkbox")
+
+	if (textPoznamka.length === 0) {
+		poznamkaInput.classList.add("is-invalid")
+		poznamkaInput.focus()
+		return
+	}
+	
+	if (!checkbox.checked) {
+		checkbox.classList.add("is-invalid")
+		checkbox.focus()
+		return
+	}
+	
+  	poznamka.innerHTML = `<p class="card-text">${textPoznamka}</p>`
+})
+
+
+const play = document.querySelector(".play")
+const video = document.querySelector("video")
+const pauza = document.querySelector(".pause")
+const prehravac = document.querySelector("#prehravac")
+
+play.addEventListener("click", () => {
+	video.play()
+	video.addEventListener("playing", () => {
+		prehravac.classList.add("playing")
+	})
+})
+	  
+pauza.addEventListener("click", () => {
+	video.pause()
+	video.addEventListener("pause", () => {
+		prehravac.classList.remove("playing")
+	})	
+})
+
+
+const cas = document.querySelector(".current-time")
+video.addEventListener("timeupdate", () => {
+	const aktualniCas = video.currentTime
+	const minuty = Math.floor(aktualniCas / 60).toString()
+	const sekundy = Math.floor(aktualniCas % 60).toString()
+	const minutyUprv = minuty.padStart(2,"0")
+	const sekundyUprv = sekundy.padStart(2,"0")
+
+	cas.textContent =`${minutyUprv}:${sekundyUprv}`
+})
+
+
+document.addEventListener("keydown", (event) => {
+	if (
+		event.code === 'Space' &&
+		event.target.tagName !== 'TEXTAREA' &&
+		event.target.tagName !== 'INPUT' &&
+		event.target.tagName !== 'BUTTON'
+		) {
+			if(!prehravac.classList.contains("playing")) {
+				video.play()
+				video.addEventListener("playing", () => {
+				prehravac.classList.add("playing")
+		})
+	 } else {
+		video.pause()
+		video.addEventListener("pause", () => {
+			prehravac.classList.remove("playing")
+		})
+		}
+	}
+})
